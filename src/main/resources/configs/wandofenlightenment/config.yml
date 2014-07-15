@@ -1,0 +1,29 @@
+type: lorecraftitem
+permissionnode: wandofenlightenment
+chaptername: "The wand of enlightenment"
+pages:
+- "Ever since learning the secret of the ghasts deadly fire charge, how it can be formed formed by combining the element of fire with the explosive power of gunpowder around a suitable flammable object, the Mages have pondered on how to use this powerful"
+- "object for more constructive purposes."
+- "A breakthrough was made when a young apprentice found that a simple arrow embedded within the charge would be ignited upon the breakup of the charge when it hits an object, and that the arrow then embeds itself within a near-by area and acts as a torch."
+- "Using this finding and by combining it with a damage limitation spell they crafted an item referred to as the “wand of enlightenment” which allows the wilder to cast a spell that lights up the target area. Initial trails where somewhat disappointing,"
+- "but it is believed that further research could produce a more &opowerful&r wand who's illumination area would be much larger. The &oefficiency&r of the wand could also be improved reduce the XP drain."
+itemtype: BLAZE_ROD
+name: "Wand of enlightenment"
+lorename: "The wand of enlightenment"
+loreinfo:
+- "This wand allows a targeted area to"
+- "to be lit up by placing torches from"
+- "your inventory at suitable locations"
+- "in the targeted area"
+recipe:
+- "  A"
+- " F "
+- "B  "
+ingredients:
+- A: ARROW
+- F: FIREBALL
+- B: BLAZE_ROD
+enchantments:
+- ARROW_DAMAGE
+- DIG_SPEED
+actionclass: io.github.basicmark.lorecraft.core.wands.WandOfEnlightenment

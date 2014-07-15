@@ -1,0 +1,16 @@
+name: LoreCraft
+author: basicmark
+description: TBD
+main: io.github.basicmark.lorecraft.LoreCraft
+startup: postworld
+url: None
+depend: []
+softdepend: []
+version: 0.1
+permissions:
+    lorecraft.wandofreplacement:
+        description: Allows a player to use the wand of replacement
+        default: false
+    lorecraft.wandofenlightenment:
+        description: Allows a player to use the wand of enlightenment
+        default: false

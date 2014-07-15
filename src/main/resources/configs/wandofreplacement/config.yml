@@ -1,0 +1,28 @@
+type: lorecraftitem
+permissionnode: wandofreplacement
+chaptername: "The wand of replacement"
+pages:
+- "After careful study of the magical properties of nether star, which give the wither its block breaking capabilities and the ender eye with its ender aura that allows for instant relocation plus the ability to track, the Arch-Mages determined how to infuse"
+- "these powers into a single item referred to as the “wand of replacement”.\nThis wand allows the wilder to cast a spell which breaks blocks within the effected area, transferring them to your person and then placing a block of your choice from your person in"
+- "its place.\nIt is suspected that the &oefficiency&r of the wand could be improved to reduce the XP drain. Also a more &opowerful&r wand might have further reach."
+itemtype: BLAZE_ROD
+name: "Wand of replacement"
+lorename: "The wand of replacement"
+loreinfo:
+- "This wand allows blocks of one type"
+- "to be exchanged with another that you"
+- "have in your inventory. Right click to"
+- "select the block to replace with and"
+- "left click to do the replacement"
+recipe:
+- "  E"
+- " S "
+- "B  "
+ingredients:
+- S: NETHER_STAR
+- E: EYE_OF_ENDER
+- B: BLAZE_ROD
+enchantments:
+- ARROW_DAMAGE
+- DIG_SPEED
+actionclass: io.github.basicmark.lorecraft.core.wands.WandOfReplacement
