@@ -69,6 +69,8 @@ public class LoreCraft extends JavaPlugin implements Listener {
 	public void onEnable(){
 		getLogger().info("Enabling lorecraft");
 
+		random = new Random();
+		
 		// Create/load the config file
 		saveDefaultConfig();
 		loadConfig();
@@ -301,6 +303,7 @@ public class LoreCraft extends JavaPlugin implements Listener {
         					if (loreItem.isItem(item)) {
         						break;
         					}
+        					loreItem = null;
         				}
         			}
                 	
