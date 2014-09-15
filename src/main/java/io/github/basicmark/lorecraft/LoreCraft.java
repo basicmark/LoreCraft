@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.server.v1_7_R3.ContainerAnvil;
-import net.minecraft.server.v1_7_R3.ContainerAnvilInventory;
+import net.minecraft.server.v1_7_R4.ContainerAnvil;
+import net.minecraft.server.v1_7_R4.ContainerAnvilInventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,9 +18,9 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftInventoryAnvil;
-import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryAnvil;
+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -239,7 +239,7 @@ public class LoreCraft extends JavaPlugin implements Listener {
                     AnvilInventory ai = (AnvilInventory) event.getInventory();
                     ItemStack first = ai.getItem(0);
                     ItemStack second = ai.getItem(1);
-                    net.minecraft.server.v1_7_R3.ItemStack nmsResult = ((CraftInventoryAnvil)ai).getResultInventory().getItem(0);
+                    net.minecraft.server.v1_7_R4.ItemStack nmsResult = ((CraftInventoryAnvil)ai).getResultInventory().getItem(0);
                     ItemStack result = nmsResult == null ? null : CraftItemStack.asCraftMirror(nmsResult);
                     Map<Enchantment, Integer> resultEnchantments = new HashMap<Enchantment, Integer>();
                     LoreCraftItem loreItem = null;
