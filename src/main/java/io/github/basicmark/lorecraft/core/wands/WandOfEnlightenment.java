@@ -17,8 +17,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.v1_7_R4.CraftWorld;
-import org.bukkit.craftbukkit.v1_7_R4.entity.CraftArrow;
+import org.bukkit.craftbukkit.v1_8_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftArrow;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
@@ -203,13 +203,13 @@ public class WandOfEnlightenment implements LoreCraftAction, Listener {
 				public void run() {
                     try {
 
-                    	net.minecraft.server.v1_7_R4.EntityArrow entityArrow = ((CraftArrow) projectile).getHandle();
+                    	net.minecraft.server.v1_8_R1.EntityArrow entityArrow = ((CraftArrow) projectile).getHandle();
 
-                        Field fieldX = net.minecraft.server.v1_7_R4.EntityArrow.class
+                        Field fieldX = net.minecraft.server.v1_8_R1.EntityArrow.class
                                 .getDeclaredField("d");
-                        Field fieldY = net.minecraft.server.v1_7_R4.EntityArrow.class
+                        Field fieldY = net.minecraft.server.v1_8_R1.EntityArrow.class
                                 .getDeclaredField("e");
-                        Field fieldZ = net.minecraft.server.v1_7_R4.EntityArrow.class
+                        Field fieldZ = net.minecraft.server.v1_8_R1.EntityArrow.class
                                 .getDeclaredField("f");
 
                         fieldX.setAccessible(true);
@@ -249,9 +249,10 @@ public class WandOfEnlightenment implements LoreCraftAction, Listener {
                 			int xpCost = (6 - efficiency) * 3;
 
                 			Block placedBlock = againstBlock.getRelative(face);
+                        	net.minecraft.server.v1_8_R1.World mcWorld = ((CraftWorld)placedBlock.getWorld()).getHandle();
+                			net.minecraft.server.v1_8_R1.BlockPosition mcBlockPos = new net.minecraft.server.v1_8_R1.BlockPosition(placedBlock.getX(), placedBlock.getY(), placedBlock.getZ());
 
-                        	net.minecraft.server.v1_7_R4.World mcWorld = ((CraftWorld)placedBlock.getWorld()).getHandle();
-                        	if (!net.minecraft.server.v1_7_R4.Blocks.TORCH.canPlace(mcWorld, placedBlock.getX(), placedBlock.getY(), placedBlock.getZ())) {
+                			if (!net.minecraft.server.v1_8_R1.Blocks.TORCH.canPlace(mcWorld, mcBlockPos)) {
                         		return;
                         	}
                 			
@@ -263,7 +264,8 @@ public class WandOfEnlightenment implements LoreCraftAction, Listener {
                         		newState = block.getState();
                         		//newState.setRawData(data);
                         		newState.update(true);
-                        		net.minecraft.server.v1_7_R4.Blocks.TORCH.onPlace(mcWorld, placedBlock.getX(), placedBlock.getY(), placedBlock.getZ());
+                        		net.minecraft.server.v1_8_R1.IBlockData mcBlockData = mcWorld.getType(mcBlockPos);
+                        		net.minecraft.server.v1_8_R1.Blocks.TORCH.onPlace(mcWorld, mcBlockPos, mcBlockData);
 
                         		LoreCraftBlockPlaceEvent placeEvent = new LoreCraftBlockPlaceEvent(placedBlock, oldState, againstBlock, torch, player, true);
                         		plugin.getServer().getPluginManager().callEvent(placeEvent);
