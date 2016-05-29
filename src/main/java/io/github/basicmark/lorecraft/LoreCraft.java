@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.server.v1_8_R1.ContainerAnvil;
-import net.minecraft.server.v1_8_R1.ContainerAnvilInventory;
+import net.minecraft.server.v1_9_R1.ContainerAnvil;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,9 +18,10 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftInventoryAnvil;
-import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftInventoryAnvil;
+import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftInventoryView;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -145,7 +146,7 @@ public class LoreCraft extends JavaPlugin implements Listener {
 			String contents = new String();
 			for (LoreCraftObject object : loreCraftObjects) {
 				if (player.hasPermission(object.getPermissionNode())) {
-					contents = contents + "§0- " + object.getChapterName() + "\n";
+					contents = contents + ChatColor.BLACK + "- " + object.getChapterName() + "\n";
 				}
 			}
 			customPages.add(contents);
@@ -247,7 +248,7 @@ public class LoreCraft extends JavaPlugin implements Listener {
                     AnvilInventory ai = (AnvilInventory) event.getInventory();
                     ItemStack first = ai.getItem(0);
                     ItemStack second = ai.getItem(1);
-                    net.minecraft.server.v1_8_R1.ItemStack nmsResult = ((CraftInventoryAnvil)ai).getResultInventory().getItem(0);
+                    net.minecraft.server.v1_9_R1.ItemStack nmsResult = ((CraftInventoryAnvil)ai).getResultInventory().getItem(0);
                     ItemStack result = nmsResult == null ? null : CraftItemStack.asCraftMirror(nmsResult);
                     Map<Enchantment, Integer> resultEnchantments = new HashMap<Enchantment, Integer>();
                     LoreCraftItem loreItem = null;
@@ -280,11 +281,10 @@ public class LoreCraft extends JavaPlugin implements Listener {
                     	}
 
                     	if (!resultEnchantments.isEmpty()) {
-                    		ContainerAnvilInventory nmsInv = (ContainerAnvilInventory) ((CraftInventoryAnvil) ai).getInventory();
                     		try {
-                    			Field containerField = ContainerAnvilInventory.class.getDeclaredField("a");
-                    			containerField.setAccessible(true);
-                    			ContainerAnvil anvil = (ContainerAnvil) containerField.get(nmsInv);
+                    			CraftInventoryView craftView = (CraftInventoryView) player.getOpenInventory();
+                    			ContainerAnvil anvil = (ContainerAnvil) craftView.getHandle();
+                    			
                     			int cost = getRepairCostAndEnchant(result, resultEnchantments);
                     			if (cost != 0)
                     			{
@@ -353,7 +353,7 @@ public class LoreCraft extends JavaPlugin implements Listener {
 	}
 
 	public int getExpToLevel(int level) {
-		return level >= 30 ? 62 + (level - 30) * 7 : (level >= 15 ? 17 + (level - 15) * 3 : 17);
+		return level >= 15 ? 37 + (level - 15) * 5 : level >= 30 ? 112 + (level - 30) * 9 : 7 + level * 2;
 	}
 	
 	private void recalcTotalExp(Player player) {

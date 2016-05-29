@@ -9,9 +9,11 @@ import io.github.basicmark.lorecraft.LoreCraftItem;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Collection;
 
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -70,7 +72,10 @@ public class WandOfReplacement implements LoreCraftAction, Listener {
 			Material.COAL_BLOCK,
 			Material.PACKED_ICE,
 			Material.GRASS,
-			Material.MYCEL);
+			Material.MYCEL,
+			Material.PURPUR_BLOCK,
+			Material.PURPUR_PILLAR,
+			Material.END_BRICKS);
 	private HashMap<Player, ReplacementPlayerData> replaceData;
 	LoreCraft loreCraft;
 	JavaPlugin plugin;
@@ -83,9 +88,8 @@ public class WandOfReplacement implements LoreCraftAction, Listener {
 
 		replaceData = new HashMap<Player, ReplacementPlayerData>();
         /* Check if players are already online */
-    	Player[] onlinePlayerList = plugin.getServer().getOnlinePlayers();
-    	for(Player player : onlinePlayerList) {
-    		replaceData.put(player, new ReplacementPlayerData(plugin, player, 2));
+    	for(Player player : plugin.getServer().getOnlinePlayers()) {
+    		replaceData.put((Player) player, new ReplacementPlayerData(plugin, player, 2));
     	}
     	
     	plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -276,7 +280,7 @@ public class WandOfReplacement implements LoreCraftAction, Listener {
 		@Override
 		public void run() {
 			boolean cont = true;
-			int totalXp = getTotalExp(player, true);
+			int totalXp = loreCraft.getTotalExp(player, true);
 
 			/* Check the player have enough items and XP before doing the swap */
 			if (player.getInventory().containsAtLeast(replacementItem, 1) && (totalXp >= xpCost)) {
@@ -349,42 +353,6 @@ public class WandOfReplacement implements LoreCraftAction, Listener {
 				active = false;
 				index = 0;
 			}
-		}
-		
-		/*
-		 * The following functions are taken from:
-		 * 
-		 * https://github.com/feildmaster/ControlORBle/blob/master/src/main/java/com/feildmaster/lib/expeditor/Editor.java
-		 * 
-		 * This is because the Minecraft XP doesn't seem to work in a sane way. If recalcTotalExp isn't called
-		 * then after enchanting the players total XP would be that before the enchantment as it seems to only
-		 * update the total XP on some events and enchanting is not one of them :( 
-		 */
-		public int getExp(Player player) {
-			return (int) (getExpToLevel(player) * player.getExp());
-		}
-
-		public int getTotalExp(Player player, boolean recalc) {
-			if (recalc) {
-				recalcTotalExp(player);
-			}
-			return player.getTotalExperience();
-		}
-
-		public int getExpToLevel(Player player) {
-			return player.getExpToLevel();
-		}
-
-		public int getExpToLevel(int level) {
-			return level >= 30 ? 62 + (level - 30) * 7 : (level >= 15 ? 17 + (level - 15) * 3 : 17);
-		}
-		
-		private void recalcTotalExp(Player player) {
-			int total = getExp(player);
-			for (int i = 0; i < player.getLevel(); i++) {
-				total += getExpToLevel(i);
-			}
-			player.setTotalExperience(total);
 		}
 	}
 }
