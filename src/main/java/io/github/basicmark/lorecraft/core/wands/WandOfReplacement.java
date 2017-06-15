@@ -75,7 +75,11 @@ public class WandOfReplacement implements LoreCraftAction, Listener {
 			Material.MYCEL,
 			Material.PURPUR_BLOCK,
 			Material.PURPUR_PILLAR,
-			Material.END_BRICKS);
+			Material.END_BRICKS,
+			Material.BONE_BLOCK,
+			Material.MAGMA,
+			Material.NETHER_WART_BLOCK,
+			Material.RED_NETHER_BRICK);
 	private HashMap<Player, ReplacementPlayerData> replaceData;
 	LoreCraft loreCraft;
 	JavaPlugin plugin;

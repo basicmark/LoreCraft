@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.server.v1_9_R1.ContainerAnvil;
-import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.ContainerAnvil;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,10 +18,6 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftInventoryAnvil;
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftInventoryView;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -248,8 +244,7 @@ public class LoreCraft extends JavaPlugin implements Listener {
                     AnvilInventory ai = (AnvilInventory) event.getInventory();
                     ItemStack first = ai.getItem(0);
                     ItemStack second = ai.getItem(1);
-                    net.minecraft.server.v1_9_R1.ItemStack nmsResult = ((CraftInventoryAnvil)ai).getResultInventory().getItem(0);
-                    ItemStack result = nmsResult == null ? null : CraftItemStack.asCraftMirror(nmsResult);
+                    ItemStack result = ai.getItem(2);
                     Map<Enchantment, Integer> resultEnchantments = new HashMap<Enchantment, Integer>();
                     LoreCraftItem loreItem = null;
 
@@ -281,20 +276,12 @@ public class LoreCraft extends JavaPlugin implements Listener {
                     	}
 
                     	if (!resultEnchantments.isEmpty()) {
-                    		try {
-                    			CraftInventoryView craftView = (CraftInventoryView) player.getOpenInventory();
-                    			ContainerAnvil anvil = (ContainerAnvil) craftView.getHandle();
-                    			
-                    			int cost = getRepairCostAndEnchant(result, resultEnchantments);
-                    			if (cost != 0)
-                    			{
-                    				anvil.a = cost;	
-                    				((CraftInventoryAnvil)ai).getResultInventory().setItem(0, CraftItemStack.asNMSCopy(result));
-                    				((CraftPlayer) event.getWhoClicked()).getHandle().setContainerData(anvil, 0, anvil.a);
-                    			}
-                    		} catch (Exception e) {
-                    			e.printStackTrace();
-                    		}
+                    		int cost = getRepairCostAndEnchant(result, resultEnchantments);
+                			if (cost != 0)
+                			{
+                				ai.setItem(2, result);
+                				ai.setRepairCost(cost);
+                			}
                     	}
                     }
                 }

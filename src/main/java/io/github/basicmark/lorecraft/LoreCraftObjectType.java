@@ -3,6 +3,7 @@ package io.github.basicmark.lorecraft;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class LoreCraftObjectType {
 
 	    InputStream defConfigStream = loreCraft.getPlugin().getResource("configs/" + name + "/config.yml");
 	    if (defConfigStream != null) {
-	        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+	        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
 	        config.setDefaults(defConfig);
 	        config.options().copyDefaults(true);
 	        try {

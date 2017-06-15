@@ -13,12 +13,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.material.MaterialData;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftArrow;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftArrow;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
@@ -203,14 +204,14 @@ public class WandOfEnlightenment implements LoreCraftAction, Listener {
 				public void run() {
                     try {
 
-                    	net.minecraft.server.v1_9_R1.EntityArrow entityArrow = ((CraftArrow) projectile).getHandle();
+                    	net.minecraft.server.v1_12_R1.EntityArrow entityArrow = ((CraftArrow) projectile).getHandle();
 
-                        Field fieldX = net.minecraft.server.v1_9_R1.EntityArrow.class
+                        Field fieldX = net.minecraft.server.v1_12_R1.EntityArrow.class
                                 .getDeclaredField("h");
-                        Field fieldY = net.minecraft.server.v1_9_R1.EntityArrow.class
-                                .getDeclaredField("as");
-                        Field fieldZ = net.minecraft.server.v1_9_R1.EntityArrow.class
+                        Field fieldY = net.minecraft.server.v1_12_R1.EntityArrow.class
                                 .getDeclaredField("at");
+                        Field fieldZ = net.minecraft.server.v1_12_R1.EntityArrow.class
+                                .getDeclaredField("au");
 
                         fieldX.setAccessible(true);
                         fieldY.setAccessible(true);
@@ -249,23 +250,33 @@ public class WandOfEnlightenment implements LoreCraftAction, Listener {
                 			int xpCost = (6 - efficiency) * 3;
 
                 			Block placedBlock = againstBlock.getRelative(face);
-                        	net.minecraft.server.v1_9_R1.World mcWorld = ((CraftWorld)placedBlock.getWorld()).getHandle();
-                			net.minecraft.server.v1_9_R1.BlockPosition mcBlockPos = new net.minecraft.server.v1_9_R1.BlockPosition(placedBlock.getX(), placedBlock.getY(), placedBlock.getZ());
+                        	net.minecraft.server.v1_12_R1.World mcWorld = ((CraftWorld)placedBlock.getWorld()).getHandle();
+                			net.minecraft.server.v1_12_R1.BlockPosition mcBlockPos = new net.minecraft.server.v1_12_R1.BlockPosition(placedBlock.getX(), placedBlock.getY(), placedBlock.getZ());
 
-                			if (!net.minecraft.server.v1_9_R1.Blocks.TORCH.canPlace(mcWorld, mcBlockPos)) {
+                			if (!net.minecraft.server.v1_12_R1.Blocks.TORCH.canPlace(mcWorld, mcBlockPos)) {
                         		return;
                         	}
                 			
                 			BlockState oldState = placedBlock.getState();
                 			BlockState newState = placedBlock.getState();
-                        	if ((data != 0) && (newState.getType() == Material.AIR) && (totalXp > xpCost)) {
+                			BlockState temp = placedBlock.getRelative(BlockFace.DOWN).getState();
+                			BlockState tempRevert = placedBlock.getRelative(BlockFace.DOWN).getState();
+                        	if ((data != 0) && (oldState.getType() == Material.AIR) && (totalXp > xpCost)) {
+                        		/*
+                        		 * Although the first update of the torch doesn't apply physics the placing of
+                        		 * the torch still fails (I assume due to a "non-physics" placement check) so
+                        		 * to get around that place a block under the torch before its direction is
+                        		 * set and revert the block under the torch.
+                        		 */
+                        		temp.setType(Material.STONE);
+                        		temp.update(true, false);
+
                         		newState.setType(Material.TORCH);
-                        		newState.update(true);
+                        		newState.update(true, false);
                         		newState = block.getState();
-                        		//newState.setRawData(data);
+                        		newState.setData(new MaterialData(Material.TORCH, data));
                         		newState.update(true);
-                        		net.minecraft.server.v1_9_R1.IBlockData mcBlockData = mcWorld.getType(mcBlockPos);
-                        		net.minecraft.server.v1_9_R1.Blocks.TORCH.onPlace(mcWorld, mcBlockPos, mcBlockData);
+                        		tempRevert.update(true, false);
 
                         		LoreCraftBlockPlaceEvent placeEvent = new LoreCraftBlockPlaceEvent(placedBlock, oldState, againstBlock, torch, player, true);
                         		plugin.getServer().getPluginManager().callEvent(placeEvent);

@@ -23,7 +23,7 @@
     	<mkdir dir="${build}"/>
         <mkdir dir="${bin}"/>
 
-        <javac source="1.6" target="1.6" srcdir="${src}" destdir="${bin}/"
+        <javac compiler="modern" source="1.8" target="1.8" srcdir="${src}" destdir="${bin}/"
                debug="true" debuglevel="${debuglevel}" deprecation="false" includeantruntime="false">
         	<compilerarg value="-Xlint:-options"/>
         	<classpath>
